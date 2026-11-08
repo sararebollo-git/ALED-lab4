@@ -123,7 +123,7 @@ public class EmergencyRoom {
 	 * @param patient The Patient.
 	 */
 	public void admit(Patient patient) {
-		// TODO
+		patient.start(); //admitir a un paciente es invocar a su metodo start para decirle a la hebra que arranque su ejecucion
 	}
 
 	/**
@@ -131,8 +131,12 @@ public class EmergencyRoom {
 	 * 
 	 * @param patient The Patient.
 	 */
-	public void waitForDischarge(Patient patient) {
-		// TODO
+	public void waitForDischarge(Patient patient) {//Patient es una hebra
+		//pero siempre entre try catch porque join puede lanzar excepciones
+		try {
+			patient.join(); //esperar es invocar a su metodo join();
+		} catch (InterruptedException e) {
+		}
 	}
 
 }

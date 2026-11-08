@@ -130,7 +130,10 @@ public class Patient extends Thread {
 	 * movement is animated by the GUI and the index is increased by one.
 	 */
 	private void advanceProtocol() {
-		// TODO
+		EmergencyRoomGUI.getInstance().animateTransfer(this,
+			this.protocol.get(indexProtocol)); //dado por el enunciado: pide a la interfaz grafica que mueva el puntito a donde tiene que moverse
+			this.location = this.protocol.get(indexProtocol).getTo(); //cambiamos la localizacion del paciente: vamos a la lista del protocolo, pedimos la posicion que esta en el indexprotocol y le preguntamos a donde tenemos que ir.
+				indexProtocol++; //incremento el indice una unidad
 	}
 
 	/**
@@ -138,8 +141,11 @@ public class Patient extends Thread {
 	 * the Patient must spend at this method the amount of time specified in such
 	 * Area.
 	 */
-	private void attendedAtLocation() {
-		// TODO
+	private void attendedAtLocation() { //el metodo sleep puede lanzar excepcion
+		try {
+			sleep(this.location.getTime()); //metodo sleep para esperar tiempo, en este caso el que tarda en esa localizacion
+		} catch (InterruptedException e) {
+		}
 	}
 
 	/**
@@ -149,7 +155,13 @@ public class Patient extends Thread {
 	 */
 	@Override
 	public void run() {
-		// TODO
+		while (this.indexProtocol < protocol.size()) { //mientras que el indice de protocolo sea menor que el numero de elementos que haya en el protocolo
+			this.attendedAtLocation();//atiendo al paciente
+			this.advanceProtocol(); //avanzo en el protocolo
+		}
+		EmergencyRoomGUI.getInstance().removePatient(this); //cuando haya terminado le pido a la pantalla grafica que borre al objeto paciente en el que se esta terminando de ejecutar este metodo run
 	}
+
+	
 
 }
